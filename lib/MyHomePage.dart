@@ -28,91 +28,107 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var screenHeight = MediaQuery.of(context).size.height;
     main();
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: () {
-              print('refreshing');
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.share),
-            onPressed: () {
-              print('sharing');
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              height: 300,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(imageUrl),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: screenHeight / 2.0,
+            bottom: PreferredSize(
+              preferredSize: Size(double.infinity, _explanationFontSize * 3),
+              child: Container(
+                color: Colors.white54,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: _explanationFontSize / 1.5,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.calendar_today),
+                        onPressed: () {
+                          print('calendar');
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.share),
+                        onPressed: () {
+                          print('sharing');
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.download_rounded),
+                        onPressed: () {
+                          print('download');
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            flexibleSpace: FlexibleSpaceBar(
+              background: GestureDetector(
+                onTap: () => {print('you touched me')},
+                child: Image.network(
+                  imageUrl,
                   fit: BoxFit.cover,
                 ),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(_radius),
-                  bottomRight: Radius.circular(_radius),
-                ),
-                color: Colors.blue,
-                boxShadow: [
-                  const BoxShadow(
-                    color: Colors.black,
-                    offset: Offset(0, 10),
-                    blurRadius: 20,
+              ),
+            ),
+            title: Text(widget.title),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  print('refreshing');
+                },
+              ),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  bottom: _textInset, left: _textInset, right: _textInset),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 15.0,
+                    width: double.infinity,
+                  ),
+                  Text(
+                    'Title of photo',
+                    style: TextStyle(
+                      fontSize: _dateFontSize,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 5.0,
+                    width: double.infinity,
+                  ),
+                  Text(
+                    'March 29, 2021',
+                    style: TextStyle(fontSize: _dateFontSize / 1.2),
+                  ),
+                  SizedBox(
+                    height: 15.0,
+                    width: double.infinity,
+                  ),
+                  Text(
+                    explanation,
+                    style: TextStyle(
+                      fontSize: _explanationFontSize,
+                    ),
                   ),
                 ],
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: _textInset,
-                  vertical: _textInset * 1.5,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Title of photo',
-                      style: TextStyle(
-                        fontSize: _dateFontSize,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5.0,
-                      width: double.infinity,
-                    ),
-                    Text(
-                      'March 29, 2021',
-                      style: TextStyle(fontSize: _dateFontSize / 1.2),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                      width: double.infinity,
-                    ),
-                    Text(
-                      explanation,
-                      style: TextStyle(
-                        fontSize: _explanationFontSize,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
