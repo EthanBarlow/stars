@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:picture_of_the_day/FullScreenImagePage.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -71,7 +72,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             flexibleSpace: FlexibleSpaceBar(
               background: GestureDetector(
-                onTap: () => {print('you touched me')},
+                onTap: () => {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          FullScreenImagePage(imageUrl: this.imageUrl),
+                    ),
+                  )
+                },
                 child: Image.network(
                   imageUrl,
                   fit: BoxFit.cover,
