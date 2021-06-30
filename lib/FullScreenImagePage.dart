@@ -19,6 +19,14 @@ class FullScreenImagePage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.download_rounded),
+              onPressed: () => {
+                print('downloading from fullscreen'),
+              },
+            ),
+          ],
         ),
         extendBodyBehindAppBar: true,
         body: PhotoView(

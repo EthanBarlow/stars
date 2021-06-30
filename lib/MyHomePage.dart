@@ -14,6 +14,7 @@ const _radius = 50.0;
 const _dateFontSize = 30.0;
 const _explanationFontSize = 16.0;
 const _textInset = 20.0;
+const _iconSize = 24.0;
 
 class _MyHomePageState extends State<MyHomePage> {
   String apiKey = "api";
@@ -32,112 +33,112 @@ class _MyHomePageState extends State<MyHomePage> {
     var screenHeight = MediaQuery.of(context).size.height;
     main();
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: screenHeight / 2.0,
-            bottom: PreferredSize(
-              preferredSize: Size(double.infinity, _explanationFontSize * 3),
-              child: Container(
-                color: Colors.white54,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: _explanationFontSize / 1.5,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.calendar_today),
-                        onPressed: () {
-                          print('calendar');
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.share),
-                        onPressed: () {
-                          print('sharing');
-                        },
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.download_rounded),
-                        onPressed: () {
-                          print('download');
-                        },
-                      ),
-                    ],
+      body: SafeArea(
+              child: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: screenHeight / 2.0,
+              bottom: PreferredSize(
+                preferredSize: Size(double.infinity, _explanationFontSize * 3),
+                child: Container(
+                  color: Colors.white54,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.calendar_today, size: _iconSize,),
+                          onPressed: () {
+                            print('calendar');
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.share, size: _iconSize),
+                          onPressed: () {
+                            print('sharing');
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.download_rounded, size: _iconSize,),
+                          onPressed: () {
+                            print('download');
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
+              flexibleSpace: FlexibleSpaceBar(
+                background: GestureDetector(
+                  onTap: () => {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            FullScreenImagePage(imageUrl: this.imageUrl),
+                      ),
+                    )
+                  },
+                  child: Image.network(
+                    imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              title: Text(widget.title),
+              // actions: [
+              //   IconButton(
+              //     icon: Icon(Icons.refresh),
+              //     onPressed: () {
+              //       print('refreshing');
+              //     },
+              //   ),
+              // ],
             ),
-            flexibleSpace: FlexibleSpaceBar(
-              background: GestureDetector(
-                onTap: () => {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          FullScreenImagePage(imageUrl: this.imageUrl),
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(
+                    bottom: _textInset, left: _textInset, right: _textInset),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 15.0,
+                      width: double.infinity,
                     ),
-                  )
-                },
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover,
+                    Text(
+                      'Title of photo',
+                      style: TextStyle(
+                        fontSize: _dateFontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                      width: double.infinity,
+                    ),
+                    Text(
+                      'March 29, 2021',
+                      style: TextStyle(fontSize: _dateFontSize / 1.2),
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                      width: double.infinity,
+                    ),
+                    Text(
+                      explanation,
+                      style: TextStyle(
+                        fontSize: _explanationFontSize,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-            title: Text(widget.title),
-            actions: [
-              IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () {
-                  print('refreshing');
-                },
-              ),
-            ],
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  bottom: _textInset, left: _textInset, right: _textInset),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: 15.0,
-                    width: double.infinity,
-                  ),
-                  Text(
-                    'Title of photo',
-                    style: TextStyle(
-                      fontSize: _dateFontSize,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 5.0,
-                    width: double.infinity,
-                  ),
-                  Text(
-                    'March 29, 2021',
-                    style: TextStyle(fontSize: _dateFontSize / 1.2),
-                  ),
-                  SizedBox(
-                    height: 15.0,
-                    width: double.infinity,
-                  ),
-                  Text(
-                    explanation,
-                    style: TextStyle(
-                      fontSize: _explanationFontSize,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
