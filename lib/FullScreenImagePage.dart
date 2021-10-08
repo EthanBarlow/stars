@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
 class FullScreenImagePage extends StatelessWidget {
-  final String imageUrl;
+  final String? imageUrl;
 
-  FullScreenImagePage({Key key, @required this.imageUrl}) : super(key: key);
+  FullScreenImagePage({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class FullScreenImagePage extends StatelessWidget {
         ),
         extendBodyBehindAppBar: true,
         body: PhotoView(
-          imageProvider: NetworkImage(imageUrl),
+          imageProvider: NetworkImage(imageUrl!),
         ),
       ),
     );

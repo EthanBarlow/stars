@@ -1,4 +1,4 @@
-class StarPicture {
+class Star {
   //A dictionary describing the image_set or planet that the response illustrates, completely determined by the structured endpoint.
   final String title;
   final DateTime returnedDate;
@@ -9,7 +9,7 @@ class StarPicture {
   final String thumbnailUrl; // the url for the thumbnail of a video
   final String copyright;
 
-  StarPicture({
+  Star({
     required this.title,
     required this.returnedDate,
     required this.url,
@@ -20,7 +20,20 @@ class StarPicture {
     required this.copyright,
   });
 
-  static StarPicture fromJson(Map<String, dynamic> json) {
+  String get imgLink {
+    if (this.hdUrl != '' && this.hdUrl != ' ') {
+      return this.hdUrl;
+    } else if (this.url != '' && this.url != ' ') {
+      return this.url;
+    } else {
+      throw Error();
+    }
+  }
+
+  bool get isCopyrighted =>
+      this.copyright.isNotEmpty || this.copyright.length > 1;
+
+  static Star fromJson(Map<String, dynamic> json) {
     String tempTitle = json['title'];
     DateTime tempReturnedDate = DateTime.parse(json['date']);
     String tempUrl = json['url'];
@@ -30,7 +43,7 @@ class StarPicture {
     String tempThumbnailUrl = json['thumbnail_url'] ?? '';
     String tempCopyright = json['copyright'];
 
-    return StarPicture(
+    return Star(
       title: tempTitle,
       returnedDate: tempReturnedDate,
       url: tempUrl,

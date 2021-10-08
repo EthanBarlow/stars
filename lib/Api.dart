@@ -16,7 +16,7 @@ class ApiHelper {
         date.day.toString().padLeft(2, '0');
     String requestUrl = _baseUrl + '?date=' + urlDate;
     print('Api get, url $requestUrl');
-    final response = await http.get(requestUrl);
+    final response = await http.get(Uri.parse(requestUrl));
     return _returnResponse(response);
   }
 
