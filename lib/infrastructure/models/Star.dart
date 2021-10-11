@@ -8,6 +8,7 @@ class Star {
   final String explanation;
   final String thumbnailUrl; // the url for the thumbnail of a video
   final String copyright;
+  bool userSaved = false;
 
   Star({
     required this.title,
