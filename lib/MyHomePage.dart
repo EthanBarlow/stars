@@ -21,8 +21,8 @@ const _textInset = 20.0;
 class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
-    context.read(starNotifierProvider.notifier).getStarData();
     super.initState();
+    context.read(starNotifierProvider.notifier).getStarData();
   }
 
   @override
@@ -44,8 +44,6 @@ class _MyHomePageState extends State<MyHomePage> {
             return CustomScrollView(slivers: [
               StarSliverAppBar(
                 screenHeight: screenHeight,
-                hasRestrictions: starState.star.isCopyrighted,
-                imageLink: starState.star.imgLink,
               ),
               SliverToBoxAdapter(
                   child: Padding(
@@ -93,4 +91,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-

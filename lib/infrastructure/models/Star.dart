@@ -33,6 +33,8 @@ class Star {
   bool get isCopyrighted =>
       this.copyright.isNotEmpty || this.copyright.length > 1;
 
+  bool get hasRestrictions => isCopyrighted;
+
   static Star fromJson(Map<String, dynamic> json) {
     String tempTitle = json['title'];
     DateTime tempReturnedDate = DateTime.parse(json['date']);

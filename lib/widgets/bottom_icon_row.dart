@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:picture_of_the_day/services/image_downloader.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:picture_of_the_day/application/star_notifier.dart';
+import 'package:picture_of_the_day/infrastructure/models/Star.dart';
+import 'package:picture_of_the_day/providers.dart';
+import 'package:picture_of_the_day/widgets/download_button.dart';
 
 const _iconSize = 24.0;
 
 class BottomIconRow extends StatelessWidget {
-  const BottomIconRow({
-    Key? key,
-    required this.hasRestrictions,
-    required this.imageLink,
-  }) : super(key: key);
-
-  final bool hasRestrictions;
-  final String imageLink;
+  const BottomIconRow({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,47 +16,45 @@ class BottomIconRow extends StatelessWidget {
       color: Colors.white54,
       child: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            IconButton(
-              icon: Icon(
-                Icons.calendar_today,
-                size: _iconSize,
+        child: Consumer(builder: (context, watch, child) {
+          final starState = watch(starNotifierProvider);
+          starState as StarLoaded;
+          Star star = starState.star;
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                flex: 1,
+                child: IconButton(
+                  icon: Icon(
+                    Icons.calendar_today,
+                    size: _iconSize,
+                  ),
+                  onPressed: () {
+                    print('calendar');
+                  },
+                ),
               ),
-              onPressed: () {
-                print('calendar');
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.share, size: _iconSize),
-              onPressed: hasRestrictions
-                  ? null
-                  : () {
-                      print('sharing');
-                    },
-            ),
-            IconButton(
-              icon: Icon(
-                Icons.download_rounded,
-                size: _iconSize,
+              Expanded(
+                flex: 1,
+                child: IconButton(
+                  icon: Icon(Icons.share, size: _iconSize),
+                  onPressed: star.hasRestrictions
+                      ? null
+                      : () {
+                          print('sharing');
+                        },
+                ),
               ),
-              onPressed: hasRestrictions
-                  ? null
-                  : () {
-                      downloadNetworkImage(imageLink).then((valid) {
-                        if (valid) {
-                          print('done downloading');
-                        } else {
-                          print('error downloading');
-                        }
-                        // print(file);
-                      });
-                      print('download');
-                    },
-            ),
-          ],
-        ),
+              Expanded(
+                flex: 1,
+                child: DownloadButton(
+                  imageLink: star.imgLink,
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

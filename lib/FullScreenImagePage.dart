@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:picture_of_the_day/widgets/download_button.dart';
 
 class FullScreenImagePage extends StatelessWidget {
   final String? imageUrl;
@@ -19,14 +20,7 @@ class FullScreenImagePage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.download_rounded),
-              onPressed: () => {
-                print('downloading from fullscreen'),
-              },
-            ),
-          ],
+          actions: [DownloadButton(imageLink: imageUrl!)],
         ),
         extendBodyBehindAppBar: true,
         body: PhotoView(

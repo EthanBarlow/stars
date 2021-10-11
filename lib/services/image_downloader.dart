@@ -24,5 +24,5 @@ import 'package:path_provider/path_provider.dart';
 Future<bool> downloadNetworkImage(String url) async {
   // TODO: revisit this method for security. Should I sanitize the url before making a network call to it? ... probably
   bool? imageIsSaved = await GallerySaver.saveImage(url);
-  return Future(() => imageIsSaved ?? false); //return false if no bool was returned from the library
+  return Future(() => imageIsSaved ?? true); //return false if no bool was returned from the library
 }
