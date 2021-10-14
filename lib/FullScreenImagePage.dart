@@ -20,7 +20,7 @@ class FullScreenImagePage extends StatelessWidget {
               Navigator.pop(context);
             },
           ),
-          actions: [DownloadButton(imageLink: imageUrl!)],
+          actions: [DownloadButton(darkBackground: true,)],
         ),
         extendBodyBehindAppBar: true,
         body: PhotoView(

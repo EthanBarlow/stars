@@ -13,11 +13,13 @@ class BottomIconRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white54,
+      decoration: BoxDecoration(color: Colors.white, boxShadow: [BoxShadow( color: Colors.black45, offset: Offset(0, 3.0), blurRadius: 3.0, spreadRadius: 2)]),
+      // color: Colors.white54,
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Consumer(builder: (context, watch, child) {
           final starState = watch(starNotifierProvider);
+          final notifier = watch(starNotifierProvider.notifier);
           starState as StarLoaded;
           Star star = starState.star;
           return Row(
@@ -32,6 +34,21 @@ class BottomIconRow extends StatelessWidget {
                   ),
                   onPressed: () {
                     print('calendar');
+                    Future<DateTime?> selectedDate = showDatePicker(
+                      context: context,
+                      initialDate: star.returnedDate,
+                      firstDate: DateTime.parse('1995-06-16'),
+                      lastDate: DateTime.now(),
+                    );
+                    selectedDate.then((datetime) {
+                      print('datetime');
+                      print(datetime);
+                      // if datetime == null, the user canceled the dialog
+                      if (datetime != null && datetime != star.returnedDate) {
+                        notifier.getStarData(datetime);
+                        context.read(downloadNotifierProvider.notifier).setHasNotDownloaded();
+                      }
+                    });
                   },
                 ),
               ),
@@ -48,9 +65,7 @@ class BottomIconRow extends StatelessWidget {
               ),
               Expanded(
                 flex: 1,
-                child: DownloadButton(
-                  imageLink: star.imgLink,
-                ),
+                child: DownloadButton(darkBackground: false,),
               ),
             ],
           );

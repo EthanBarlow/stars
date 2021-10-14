@@ -28,15 +28,26 @@ class StarNotifier extends StateNotifier<StarState> {
   final StarRepository _starRepository;
   StarNotifier(this._starRepository) : super(StarInitial());
 
-  Future<void> getStarData() async {
+  Future<void> getStarData(DateTime dateTime) async {
+    print('getstardata');
     try {
+      // print('star loading');
       state = StarLoading();
-      final star = await _starRepository.fetchStar();
+      // print('await repo.fetchstar');
+      final star = await _starRepository.fetchStar(dateTime);
+      // print('star loaded');
       state = StarLoaded(star);
     } on Exception {
+      // print('star error');
       state = StarError('shooting star...');
     }
   }
+
+  // Future<void> recordUserSaved() async {
+  //   if (state == StarLoaded) {
+  //     state = StarLoaded((state as StarLoaded).star.copyWith(userSaved: true));
+  //   }
+  // }
   
 }
 

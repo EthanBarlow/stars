@@ -12,9 +12,10 @@ enum DownloadState {
 }
 
 class DownloadButton extends StatefulWidget {
-  DownloadButton({Key? key, required this.imageLink}) : super(key: key);
+  DownloadButton({Key? key, required this.darkBackground}) : super(key: key);
+  final bool darkBackground;
   // final DownloadState _downloadState = DownloadState.initial;
-  final String imageLink;
+  // final String imageLink;
 
   @override
   _DownloadButtonState createState() => _DownloadButtonState();
@@ -22,45 +23,63 @@ class DownloadButton extends StatefulWidget {
 
 class _DownloadButtonState extends State<DownloadButton> {
   // late Future<bool> result;
+
   DownloadState _downloadState = DownloadState.initial;
   @override
   Widget build(BuildContext context) {
-    switch (_downloadState) {
-      case DownloadState.running:
-        return Center(
-            child: Container(
-                width: 24.0, height: 24.0, child: CircularProgressIndicator()));
-      case DownloadState.success:
-        return Icon(Icons.download_done);
-      case DownloadState.failure:
-        return Icon(Icons.file_download_off);
-      case DownloadState.initial:
-        return Consumer(builder: (context, watch, child) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Center(
+        child: Consumer(builder: (context, watch, child) {
           final starState = watch(starNotifierProvider);
+          final downloadedState = watch(downloadNotifierProvider.notifier);
           starState as StarLoaded;
-          if (starState.star.userSaved) {
-            return Icon(Icons.download_done);
+          switch (_downloadState) {
+            case DownloadState.running:
+              return Container(
+                  width: 24.0,
+                  height: 24.0,
+                  child: CircularProgressIndicator(color: widget.darkBackground ? Colors.white : Colors.black,));
+            case DownloadState.success:
+              return Icon(Icons.download_done);
+            case DownloadState.failure:
+              return Icon(Icons.file_download_off);
+            case DownloadState.initial:
+              if (downloadedState.hasDownloaded) {
+                return Icon(Icons.download_done);
+              }
+              return InkResponse(
+                child: Icon(Icons.download),
+                onTap: starState.star.hasRestrictions
+                    ? null
+                    : () {
+                        setState(() {
+                          _downloadState = DownloadState.running;
+                        });
+                        downloadedState.setHasDownloaded();
+                        downloadNetworkImage(starState.star.imgLink).then((result) {
+                          if (!mounted) return;
+                          setState(() {
+                            if (result) {
+                              // starState.star.i
+                              // starState.star.userSaved = true;
+                              // starState.star = starState.star;
+                              // ref
+                              //     .watch(starNotifierProvider.notifier)
+                              //     .recordUserSaved();
+                            }
+                            _downloadState = result
+                                ? DownloadState.success
+                                : DownloadState.failure;
+                          });
+                        });
+                      },
+              );
           }
-          return IconButton(
-            icon: Icon(Icons.download),
-            onPressed: () {
-              setState(() {
-                _downloadState = DownloadState.running;
-              });
-              downloadNetworkImage(widget.imageLink).then((result) {
-                setState(() {
-                  if (result) {
-                    starState.star.userSaved = true;
-                  }
-                  _downloadState =
-                      result ? DownloadState.success : DownloadState.failure;
-                });
-              });
-            },
-          );
-        });
-      // break;
-
-    }
+        }),
+      ),
+    );
   }
+  // break;
+
 }

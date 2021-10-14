@@ -3,8 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:picture_of_the_day/application/download_notifier.dart';
 import 'package:picture_of_the_day/application/star_notifier.dart';
 import 'package:picture_of_the_day/providers.dart';
+import 'package:picture_of_the_day/widgets/bottom_icon_row.dart';
 import 'package:picture_of_the_day/widgets/star_sliver_app_bar.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -17,12 +19,34 @@ class MyHomePage extends StatefulWidget {
 
 const _dateFontSize = 30.0;
 const _textInset = 20.0;
+const _explanationFontSize = 16.0;
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final UserDownloadStateNotifier userDownloadStateNotifier;
+  late final StarNotifier starNotifier;
   @override
   void initState() {
     super.initState();
-    context.read(starNotifierProvider.notifier).getStarData();
+    starNotifier = context.read(starNotifierProvider.notifier);
+    userDownloadStateNotifier = context.read(downloadNotifierProvider.notifier);
+    starNotifier.getStarData(DateTime.now());
+
+    userDownloadStateNotifier.setHasNotDownloaded();
+    userDownloadStateNotifier.addListener((state) {
+      // print('activating the listener');
+      // print('state');
+      // print(state);
+      // print('state');
+      if (userDownloadStateNotifier.mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    userDownloadStateNotifier.dispose();
+    super.dispose();
   }
 
   @override
@@ -44,6 +68,13 @@ class _MyHomePageState extends State<MyHomePage> {
             return CustomScrollView(slivers: [
               StarSliverAppBar(
                 screenHeight: screenHeight,
+              ),
+              SliverToBoxAdapter(
+                child: PreferredSize(
+                  preferredSize:
+                      Size(double.infinity, _explanationFontSize * 3),
+                  child: BottomIconRow(),
+                ),
               ),
               SliverToBoxAdapter(
                   child: Padding(

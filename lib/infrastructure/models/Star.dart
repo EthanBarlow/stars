@@ -8,7 +8,7 @@ class Star {
   final String explanation;
   final String thumbnailUrl; // the url for the thumbnail of a video
   final String copyright;
-  bool userSaved = false;
+  final bool userSaved;
 
   Star({
     required this.title,
@@ -19,6 +19,7 @@ class Star {
     required this.explanation,
     required this.thumbnailUrl,
     required this.copyright,
+    this.userSaved = false,
   });
 
   String get imgLink {
@@ -44,7 +45,7 @@ class Star {
     String tempMediaType = json['media_type'];
     String tempExplanation = json['explanation'];
     String tempThumbnailUrl = json['thumbnail_url'] ?? '';
-    String tempCopyright = json['copyright'];
+    String tempCopyright = '';//json['copyright'] ?? '';
 
     return Star(
       title: tempTitle,
@@ -55,6 +56,30 @@ class Star {
       explanation: tempExplanation,
       thumbnailUrl: tempThumbnailUrl,
       copyright: tempCopyright,
+    );
+  }
+
+  Star copyWith({
+    String? title,
+    DateTime? returnedDate,
+    String? url,
+    String? hdUrl,
+    String? mediaType,
+    String? explanation,
+    String? thumbnailUrl,
+    String? copyright,
+    bool? userSaved,
+  }) {
+    return Star(
+      title: title ?? this.title,
+      returnedDate: returnedDate ?? this.returnedDate,
+      url: url ?? this.url,
+      hdUrl: hdUrl ?? this.hdUrl,
+      mediaType: mediaType ?? this.mediaType,
+      explanation: explanation ?? this.explanation,
+      thumbnailUrl: thumbnailUrl ?? this.thumbnailUrl,
+      copyright: copyright ?? this.copyright,
+      userSaved: userSaved ?? this.userSaved,
     );
   }
 }

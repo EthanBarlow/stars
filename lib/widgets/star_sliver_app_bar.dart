@@ -17,11 +17,12 @@ class StarSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverAppBar(
+      actions: [IconButton(onPressed: (){print('woo hoo');}, icon: Icon(Icons.launch))],
       expandedHeight: screenHeight / 2.0,
-      bottom: PreferredSize(
-        preferredSize: Size(double.infinity, _explanationFontSize * 3),
-        child: BottomIconRow(),
-      ),
+      // bottom: PreferredSize(
+      //   preferredSize: Size(double.infinity, _explanationFontSize * 3),
+      //   child: BottomIconRow(),
+      // ),
       flexibleSpace: FlexibleSpaceBar(
         background: AppBarHeaderWidget(),
       ),
