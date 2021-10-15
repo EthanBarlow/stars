@@ -12,6 +12,7 @@ class FullScreenImagePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(

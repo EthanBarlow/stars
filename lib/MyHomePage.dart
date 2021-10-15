@@ -33,10 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     userDownloadStateNotifier.setHasNotDownloaded();
     userDownloadStateNotifier.addListener((state) {
-      // print('activating the listener');
-      // print('state');
-      // print(state);
-      // print('state');
+      // used to update the download icon after returning from the full screen page view
       if (userDownloadStateNotifier.mounted) {
         setState(() {});
       }

@@ -1,31 +1,11 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:loading_animations/loading_animations.dart';
 import 'package:picture_of_the_day/FullScreenImagePage.dart';
-import 'package:picture_of_the_day/application/star_notifier.dart';
 import 'package:picture_of_the_day/infrastructure/models/Star.dart';
-import 'package:picture_of_the_day/providers.dart';
 import 'package:picture_of_the_day/widgets/header_error_widget.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
-class AppBarHeaderWidget extends StatelessWidget {
-  AppBarHeaderWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Consumer(builder: (context, watch, child) {
-      final starState = watch(starNotifierProvider);
-      starState as StarLoaded;
-      Star star = starState.star;
-      // return Placeholder();
-
-      return star.mediaType.contains('image')
-          ? ImageWidget(star: star)
-          : VideoWidget(star: star);
-    });
-  }
-}
 
 class ImageWidget extends StatelessWidget {
   const ImageWidget({Key? key, required this.star}) : super(key: key);
@@ -49,6 +29,15 @@ class ImageWidget extends StatelessWidget {
           ? Image.network(
               star.imgLink,
               fit: BoxFit.cover,
+              loadingBuilder: (context, child, loadingProgress) {
+                print(loadingProgress);
+                if (loadingProgress == null) return child;
+                return LoadingBouncingGrid.circle(
+                  size: 100,
+                  backgroundColor: Color(0xFF4FB2E7),
+                  inverted: true,
+                );
+              },
             )
           : HeaderErrorWidget(imageLink: star.imgLink),
     );

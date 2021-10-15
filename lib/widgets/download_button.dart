@@ -39,7 +39,7 @@ class _DownloadButtonState extends State<DownloadButton> {
               return Container(
                   width: 24.0,
                   height: 24.0,
-                  child: CircularProgressIndicator(color: widget.darkBackground ? Colors.white : Colors.black,));
+                  child: CircularProgressIndicator(color: widget.darkBackground ? Colors.amber[100] : Colors.amber[800],));
             case DownloadState.success:
               return Icon(Icons.download_done);
             case DownloadState.failure:

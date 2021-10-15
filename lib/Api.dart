@@ -35,4 +35,17 @@ class ApiHelper {
       throw Exception('Failed to find the stars');
     }
   }
+
+  static String deriveApodLink(DateTime date) {
+    const basePrefix = 'https://apod.nasa.gov/apod/ap';
+    const baseSuffix = '.html';
+
+    // year % 100 should leave the last 2 digits of the year
+    String year = (date.year % 100).toString().padLeft(2, '0');
+    String month = date.month.toString().padLeft(2, '0');
+    String day = date.day.toString().padLeft(2, '0');
+
+    // return '$basePrefix$year$month$day$baseSuffix';
+    return basePrefix + year + month + day + baseSuffix;
+  }
 }
