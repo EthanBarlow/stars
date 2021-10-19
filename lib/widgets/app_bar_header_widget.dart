@@ -14,32 +14,26 @@ class ImageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: star.hasRestrictions
-          ? null
-          : () => {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        FullScreenImagePage(imageUrl: star.imgLink),
-                  ),
-                )
-              },
-      child: !star.hasRestrictions
-          ? Image.network(
-              star.imgLink,
-              fit: BoxFit.cover,
-              loadingBuilder: (context, child, loadingProgress) {
-                print(loadingProgress);
-                if (loadingProgress == null) return child;
-                return LoadingBouncingGrid.circle(
-                  size: 100,
-                  backgroundColor: Color(0xFF4FB2E7),
-                  inverted: true,
-                );
-              },
-            )
-          : HeaderErrorWidget(imageLink: star.imgLink),
+      onTap: () => {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FullScreenImagePage(imageUrl: star.imgLink),
+          ),
+        )
+      },
+      child: Image.network(
+        star.imgLink,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return LoadingBouncingGrid.circle(
+            size: 100,
+            backgroundColor: Color(0xFF4FB2E7),
+            inverted: true,
+          );
+        },
+      ),
     );
   }
 }
@@ -55,9 +49,6 @@ class VideoWidget extends StatefulWidget {
 class _VideoWidgetState extends State<VideoWidget> {
   late YoutubePlayerController _controller;
   late PlayerState _playerState;
-  late YoutubeMetaData _videoMetaData;
-  double _volume = 100;
-  bool _muted = false;
   bool _isPlayerReady = false;
   String? videoId;
   @override
@@ -77,7 +68,6 @@ class _VideoWidgetState extends State<VideoWidget> {
           enableCaption: true,
         ),
       )..addListener(listener);
-      _videoMetaData = const YoutubeMetaData();
       _playerState = PlayerState.unknown;
     }
   }
@@ -86,7 +76,6 @@ class _VideoWidgetState extends State<VideoWidget> {
     if (_isPlayerReady && mounted && !_controller.value.isFullScreen) {
       setState(() {
         _playerState = _controller.value.playerState;
-        _videoMetaData = _controller.metadata;
       });
     }
   }
@@ -114,9 +103,11 @@ class _VideoWidgetState extends State<VideoWidget> {
                 _isPlayerReady = true;
               },
             ),
-            builder: (context, player) => player)
+            builder: (context, player) => player,
+          )
         : HeaderErrorWidget(
             imageLink:
-                'https://apod.nasa.gov/apod/image/1610/m33_brc_lrgb_ha_hiresPivato.jpg');
+                'https://apod.nasa.gov/apod/image/1610/m33_brc_lrgb_ha_hiresPivato.jpg',
+          );
   }
 }

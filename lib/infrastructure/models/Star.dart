@@ -45,7 +45,7 @@ class Star {
     String tempMediaType = json['media_type'];
     String tempExplanation = json['explanation'];
     String tempThumbnailUrl = json['thumbnail_url'] ?? '';
-    String tempCopyright = '';//json['copyright'] ?? '';
+    String tempCopyright = json['copyright'] ?? '';
 
     return Star(
       title: tempTitle,

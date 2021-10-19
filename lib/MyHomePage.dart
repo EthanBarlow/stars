@@ -5,7 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:picture_of_the_day/application/download_notifier.dart';
 import 'package:picture_of_the_day/application/star_notifier.dart';
+import 'package:picture_of_the_day/constants.dart';
 import 'package:picture_of_the_day/providers.dart';
+import 'package:picture_of_the_day/star_exception.dart';
 import 'package:picture_of_the_day/widgets/bottom_icon_row.dart';
 import 'package:picture_of_the_day/widgets/star_sliver_app_bar.dart';
 
@@ -29,8 +31,16 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     starNotifier = context.read(starNotifierProvider.notifier);
     userDownloadStateNotifier = context.read(downloadNotifierProvider.notifier);
+    try {
     starNotifier.getStarData(DateTime.now());
-
+    } on StarException catch(se) {
+      if (se.code == StarExceptionCode.rateLimitReached) {
+        print(rateLimitMessage);
+        print(rateLimitTechMessage);
+        // TODO: write code for error handling
+      }
+      return;
+    }
     userDownloadStateNotifier.setHasNotDownloaded();
     userDownloadStateNotifier.addListener((state) {
       // used to update the download icon after returning from the full screen page view
@@ -61,7 +71,6 @@ class _MyHomePageState extends State<MyHomePage> {
           } else if (starState is StarError) {
             return Center(child: Text('ERROR --- descriptive messages'));
           } else if (starState is StarLoaded) {
-            print(starState.star.copyright);
             return CustomScrollView(slivers: [
               StarSliverAppBar(
                 screenHeight: screenHeight,
@@ -96,6 +105,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       width: double.infinity,
                     ),
                     Text(
+                      'Credits: ${starState.star.copyright}',
+                      style: TextStyle(fontSize: 14.0),
+                    ),
+                    SizedBox(
+                      height: 15.0,
+                      width: double.infinity,
+                    ),
+                    Text(
                       DateFormat.yMMMd().format(starState.star.returnedDate),
                       style: TextStyle(fontSize: _dateFontSize / 1.2),
                     ),
@@ -106,7 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Text(
                       starState.star.explanation,
                       style: TextStyle(fontSize: 18.0),
-                    )
+                    ),
                   ],
                 ),
               ))

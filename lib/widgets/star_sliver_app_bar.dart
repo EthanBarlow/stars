@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:picture_of_the_day/Api.dart';
@@ -7,8 +6,7 @@ import 'package:picture_of_the_day/infrastructure/models/Star.dart';
 import 'package:picture_of_the_day/providers.dart';
 import 'package:picture_of_the_day/widgets/app_bar_header_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-const _explanationFontSize = 16.0;
+import 'package:picture_of_the_day/constants.dart';
 
 class StarSliverAppBar extends StatelessWidget {
   const StarSliverAppBar({
@@ -29,10 +27,8 @@ class StarSliverAppBar extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () async {
-              print('woo hoo');
               String _url = ApiHelper.deriveApodLink(star.returnedDate);
               if (await canLaunch(_url)) {
-                print('able to launch!!!');
                 await launch(
                   _url,
                   forceWebView: true,
@@ -40,7 +36,14 @@ class StarSliverAppBar extends StatelessWidget {
                   enableJavaScript: true,
                 );
               } else {
-                print('unable to launch <<<>>>');
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text(errorLaunch),
+                    );
+                  },
+                );
               }
             },
             icon: Icon(
@@ -57,7 +60,16 @@ class StarSliverAppBar extends StatelessWidget {
               color: Colors.white,
             ),
             onPressed: () {
-              print('how may I be of assistance?');
+              showAboutDialog(
+                context: context,
+                applicationName: appName,
+                applicationLegalese: myLegalese,
+                children: [
+                  Text(premiumVersion),
+                  SizedBox(height: 10),
+                  Text(bugSubmission),
+                ],
+              );
             },
           )
         ],

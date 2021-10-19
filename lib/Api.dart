@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:picture_of_the_day/infrastructure/models/Star.dart';
+import 'package:picture_of_the_day/star_exception.dart';
 
 class ApiHelper {
   static Future<Star> getStar(DateTime date) async {
@@ -15,21 +16,23 @@ class ApiHelper {
         '-' +
         date.day.toString().padLeft(2, '0');
     String requestUrl = _baseUrl + '&date=' + urlDate;
-    print('Api get, url $requestUrl');
     final response = await http.get(Uri.parse(requestUrl));
     if (response.statusCode == 403) {
-      // print('FORBIDDEN!!!');
-      // print(response.reasonPhrase);
-      // print('headers:');
-      // print(response.headers.toString());
+      throw StarException(
+        code: StarExceptionCode.forbidden,
+        message: 'Failed to find the stars',
+      );
     }
-    // print('response');
-    // print(response);
     return _returnResponse(response);
   }
 
   static Star _returnResponse(http.Response response) {
     if (response.statusCode < 400) {
+      int rateLimitRemaining =
+          int.parse(response.headers['x-ratelimit-remaining'] ?? '0');
+      if (rateLimitRemaining == 0) {
+        throw StarException(code: StarExceptionCode.rateLimitReached);
+      }
       return Star.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to find the stars');

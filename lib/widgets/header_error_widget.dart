@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:picture_of_the_day/constants.dart';
 
 class HeaderErrorWidget extends StatelessWidget {
   final String imageLink;
@@ -38,7 +39,7 @@ class HeaderErrorWidget extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 26.0),
                 child: Text(
-                  'There seems to be an issue with this media... try visiting the astronomy picture of the day website by tapping the button in the upper right corner',
+                  problemMedia,
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.justify,
                 ),
