@@ -1,5 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:picture_of_the_day/constants.dart';
 import 'dart:convert';
 import 'dart:async';
 
@@ -23,16 +24,19 @@ class ApiHelper {
         message: 'Failed to find the stars',
       );
     }
+    int rateLimitRemaining =
+        int.parse(response.headers['x-ratelimit-remaining'] ?? '0');
+    if (rateLimitRemaining == 0) {
+      throw StarException(
+        code: StarExceptionCode.rateLimitReached,
+        message: rateLimitMessage,
+      );
+    }
     return _returnResponse(response);
   }
 
   static Star _returnResponse(http.Response response) {
     if (response.statusCode < 400) {
-      int rateLimitRemaining =
-          int.parse(response.headers['x-ratelimit-remaining'] ?? '0');
-      if (rateLimitRemaining == 0) {
-        throw StarException(code: StarExceptionCode.rateLimitReached);
-      }
       return Star.fromJson(jsonDecode(response.body));
     } else {
       throw Exception('Failed to find the stars');

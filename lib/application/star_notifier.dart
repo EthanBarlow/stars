@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:picture_of_the_day/constants.dart';
 import 'package:picture_of_the_day/infrastructure/models/Star.dart';
 import 'package:picture_of_the_day/infrastructure/repositories/star_repository.dart';
+import 'package:picture_of_the_day/star_exception.dart';
 
 abstract class StarState {
   const StarState();
@@ -32,10 +34,16 @@ class StarNotifier extends StateNotifier<StarState> {
     try {
       state = StarLoading();
       final star = await _starRepository.fetchStar(dateTime);
+      // throw StarException(code: StarExceptionCode.rateLimitReached);
       state = StarLoaded(star);
+    } on StarException catch (ex) {
+      if (ex.code == StarExceptionCode.rateLimitReached) {
+        state = StarError(rateLimitMessage);
+      } else {
+        state = StarError('shooting star...');
+      }
     } on Exception {
       state = StarError('shooting star...');
     }
-  }  
+  }
 }
-

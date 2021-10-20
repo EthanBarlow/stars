@@ -4,9 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:picture_of_the_day/constants.dart';
 
 class HeaderErrorWidget extends StatelessWidget {
+  final String errorText;
   final String imageLink;
-  const HeaderErrorWidget({Key? key, required this.imageLink})
-      : super(key: key);
+  const HeaderErrorWidget({
+    Key? key,
+    required this.imageLink,
+    this.errorText = '',
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,7 @@ class HeaderErrorWidget extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 26.0),
                 child: Text(
-                  problemMedia,
+                  errorText.isNotEmpty ? errorText : problemMedia,
                   style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.w500),
                   textAlign: TextAlign.justify,
                 ),

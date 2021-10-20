@@ -36,8 +36,16 @@ class _BottomIconRowState extends State<BottomIconRow> {
         child: Consumer(builder: (context, watch, child) {
           final starState = watch(starNotifierProvider);
           final notifier = watch(starNotifierProvider.notifier);
-          starState as StarLoaded;
-          Star star = starState.star;
+          final bool isError = starState is StarError;
+          Star star;
+          DateTime returnedDate = DateTime.now();
+          String imgLink = '';
+          if (!isError) {
+            starState as StarLoaded;
+            star = starState.star;
+            imgLink = star.imgLink;
+            returnedDate = star.returnedDate;
+          }
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -51,20 +59,16 @@ class _BottomIconRowState extends State<BottomIconRow> {
                   onPressed: () {
                     Future<DateTime?> selectedDate = showDatePicker(
                       context: context,
-                      initialDate: star.returnedDate,
+                      initialDate: returnedDate,
                       firstDate: DateTime.parse(earliestDate),
                       lastDate: DateTime.now(),
                     );
                     selectedDate.then((datetime) {
                       // if datetime == null, the user canceled the dialog
-                      if (datetime != null && datetime != star.returnedDate) {
+                      if (datetime != null && datetime != returnedDate) {
                         try {
                           notifier.getStarData(datetime);
-                        } on StarException catch (se) {
-                          if (se.code == StarExceptionCode.rateLimitReached) {
-                            print(rateLimitMessage);
-                            print(rateLimitTechMessage);
-                          }
+                        } on StarException {
                           return;
                         }
                         context
@@ -78,23 +82,30 @@ class _BottomIconRowState extends State<BottomIconRow> {
               Expanded(
                 flex: 1,
                 child: IconButton(
-                  icon: Icon(Icons.share, size: _iconSize),
-                  onPressed: () async {
-                    showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                          return Center(child: CircularProgressIndicator());
-                        });
-                    await shareNetworkImage(star.imgLink);
-                    Navigator.pop(context);
-                  },
+                  icon: Icon(
+                    Icons.share,
+                    size: _iconSize,
+                  ),
+                  onPressed: isError
+                      ? null
+                      : () async {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              });
+                          await shareNetworkImage(imgLink);
+                          Navigator.pop(context);
+                        },
                 ),
               ),
               Expanded(
                 flex: 1,
                 child: DownloadButton(
                   darkBackground: false,
+                  imgLink: imgLink,
                 ),
               ),
             ],

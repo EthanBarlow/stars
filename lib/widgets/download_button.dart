@@ -12,8 +12,13 @@ enum DownloadState {
 }
 
 class DownloadButton extends StatefulWidget {
-  DownloadButton({Key? key, required this.darkBackground}) : super(key: key);
+  DownloadButton({
+    Key? key,
+    required this.darkBackground,
+    required this.imgLink,
+  }) : super(key: key);
   final bool darkBackground;
+  final String imgLink;
 
   @override
   _DownloadButtonState createState() => _DownloadButtonState();
@@ -28,9 +33,7 @@ class _DownloadButtonState extends State<DownloadButton> {
       child: Center(
         child: Consumer(
           builder: (context, watch, child) {
-            final starState = watch(starNotifierProvider);
             final downloadedState = watch(downloadNotifierProvider.notifier);
-            starState as StarLoaded;
             switch (_downloadState) {
               case DownloadState.running:
                 return Container(
@@ -50,21 +53,28 @@ class _DownloadButtonState extends State<DownloadButton> {
                   return Icon(Icons.download_done);
                 }
                 return InkResponse(
-                  child: Icon(Icons.download),
-                  onTap: () {
-                    setState(() {
-                      _downloadState = DownloadState.running;
-                    });
-                    downloadedState.setHasDownloaded();
-                    downloadNetworkImage(starState.star.imgLink).then((result) {
-                      if (!mounted) return;
-                      setState(() {
-                        _downloadState = result
-                            ? DownloadState.success
-                            : DownloadState.failure;
-                      });
-                    });
-                  },
+                  child: Icon(
+                    Icons.download,
+                    color: widget.imgLink.isEmpty
+                        ? Theme.of(context).disabledColor
+                        : Colors.black,
+                  ),
+                  onTap: widget.imgLink.isEmpty
+                      ? null
+                      : () {
+                          setState(() {
+                            _downloadState = DownloadState.running;
+                          });
+                          downloadedState.setHasDownloaded();
+                          downloadNetworkImage(widget.imgLink).then((result) {
+                            if (!mounted) return;
+                            setState(() {
+                              _downloadState = result
+                                  ? DownloadState.success
+                                  : DownloadState.failure;
+                            });
+                          });
+                        },
                 );
             }
           },
