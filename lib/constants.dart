@@ -10,3 +10,13 @@ const String problemMedia = 'There seems to be an issue with this media... try v
 const String earliestDate = '1995-06-16';
 final DateTime earliestDateTime = DateTime.utc(1995, 6, 16);
 const String errorLaunch = 'There was a problem launching this url';
+
+const String privacyPolicyLink = 'https://github.com/EthanBarlow/stars/blob/master/privacy-policy.md';
+const String termsAndConditionsLink = 'https://github.com/EthanBarlow/stars/blob/master/terms-conditions.md';
+const String supportEmailAddress = 'dailyastro.help@gmail.com';
+
+const String mailToLaunchStr = 'mailto:$supportEmailAddress?subject=Bug Report&body=I found a bug!';
+const String mailToLaunchEndStr = ' and include both the version number and the build number. Thanks!';
+const String mailToLaunchStartStr = 'If you would like to report a bug, please email ';
+
+const String customDialogTitle = 'Help';

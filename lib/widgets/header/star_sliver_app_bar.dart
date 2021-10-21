@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:picture_of_the_day/Api.dart';
 import 'package:picture_of_the_day/application/star_notifier.dart';
 import 'package:picture_of_the_day/infrastructure/models/Star.dart';
 import 'package:picture_of_the_day/providers.dart';
-import 'package:picture_of_the_day/widgets/app_bar_header_widget.dart';
-import 'package:picture_of_the_day/widgets/header_error_widget.dart';
+import 'package:picture_of_the_day/widgets/header/app_bar_header_widget.dart';
+import 'package:picture_of_the_day/widgets/custom_about_dialog.dart';
+import 'package:picture_of_the_day/widgets/header/header_error_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:picture_of_the_day/constants.dart';
 
@@ -22,6 +24,7 @@ class StarSliverAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isInErrorState = returnedDate.isBefore(earliestDateTime);
+
     return SliverAppBar(
       backgroundColor: Colors.amber[100],
       actions: [
@@ -62,17 +65,14 @@ class StarSliverAppBar extends StatelessWidget {
             Icons.help_outline,
             color: Colors.white,
           ),
-          onPressed: () {
-            showAboutDialog(
-              context: context,
-              applicationName: appName,
-              applicationLegalese: myLegalese,
-              children: [
-                Text(premiumVersion),
-                SizedBox(height: 10),
-                Text(bugSubmission),
-              ],
-            );
+          onPressed: () async {
+            // showLicensePage(context: context);
+            PackageInfo packageInfo = await PackageInfo.fromPlatform();
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return CustomAboutDialog(packageInfo: packageInfo);
+                });
           },
         )
       ],

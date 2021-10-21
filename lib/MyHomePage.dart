@@ -9,7 +9,7 @@ import 'package:picture_of_the_day/constants.dart';
 import 'package:picture_of_the_day/providers.dart';
 import 'package:picture_of_the_day/star_exception.dart';
 import 'package:picture_of_the_day/widgets/bottom_icon_row.dart';
-import 'package:picture_of_the_day/widgets/star_sliver_app_bar.dart';
+import 'package:picture_of_the_day/widgets/header/star_sliver_app_bar.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -141,7 +141,7 @@ class MainView extends StatelessWidget {
                     ),
                   ),
                 ),
-              if (!isInErrorState)
+              if (!isInErrorState && copyright.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(top: 5.0),
                   child: Text(

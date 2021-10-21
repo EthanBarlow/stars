@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:picture_of_the_day/application/star_notifier.dart';
 import 'package:picture_of_the_day/providers.dart';
 import 'package:picture_of_the_day/services/image_downloader.dart';
 
@@ -29,7 +28,7 @@ class _DownloadButtonState extends State<DownloadButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(4.0),
       child: Center(
         child: Consumer(
           builder: (context, watch, child) {
@@ -50,16 +49,21 @@ class _DownloadButtonState extends State<DownloadButton> {
                 return Icon(Icons.file_download_off);
               case DownloadState.initial:
                 if (downloadedState.hasDownloaded) {
-                  return Icon(Icons.download_done);
+                  return IconButton(
+                    onPressed: null,
+                    icon: Icon(Icons.download_done),
+                  );
                 }
-                return InkResponse(
-                  child: Icon(
+                return IconButton(
+                  icon: Icon(
                     Icons.download,
                     color: widget.imgLink.isEmpty
                         ? Theme.of(context).disabledColor
-                        : Colors.black,
+                        : widget.darkBackground
+                            ? Colors.white
+                            : Colors.black,
                   ),
-                  onTap: widget.imgLink.isEmpty
+                  onPressed: widget.imgLink.isEmpty
                       ? null
                       : () {
                           setState(() {

@@ -16,7 +16,7 @@
         </queries>
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="picture_of_the_day"
+        android:label="AstroDaily: Astronomy Pictures Every Day"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

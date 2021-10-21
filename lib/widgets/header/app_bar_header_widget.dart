@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animations/loading_animations.dart';
 import 'package:picture_of_the_day/FullScreenImagePage.dart';
 import 'package:picture_of_the_day/infrastructure/models/Star.dart';
-import 'package:picture_of_the_day/widgets/header_error_widget.dart';
+import 'package:picture_of_the_day/widgets/header/header_error_widget.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class ImageWidget extends StatelessWidget {
