@@ -23,13 +23,7 @@ class _BottomIconRowState extends State<BottomIconRow> {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black45,
-              offset: Offset(0, 3.0),
-              blurRadius: 3.0,
-              spreadRadius: 2)
-        ],
+        border: Border(bottom: BorderSide(color: Colors.grey, width: 2.0)),
       ),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
