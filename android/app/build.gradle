@@ -53,10 +53,14 @@ android {
 
     signingConfigs {
        release {
-           keyAlias keystoreProperties['keyAlias']
-           keyPassword keystoreProperties['keyPassword']
-           storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-           storePassword keystoreProperties['storePassword']
+        //    keyAlias keystoreProperties['keyAlias']
+        //    keyPassword keystoreProperties['keyPassword']
+        //    storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+        //    storePassword keystoreProperties['storePassword']
+           keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
+           keyPassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PRIVATE_KEY_PASSWORD")
+           storeFile System.getenv("BITRISEIO_ANDROID_KEYSTORE_URL")
+           storePassword System.getenv("BITRISEIO_ANDROID_KEYSTORE_PASSWORD")
        }
    }
    buildTypes {
