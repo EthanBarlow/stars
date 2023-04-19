@@ -27,9 +27,9 @@ class _BottomIconRowState extends State<BottomIconRow> {
       ),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
-        child: Consumer(builder: (context, watch, child) {
-          final starState = watch(starNotifierProvider);
-          final notifier = watch(starNotifierProvider.notifier);
+        child: Consumer(builder: (context, ref, child) {
+          final starState = ref.watch(starNotifierProvider);
+          final notifier = ref.watch(starNotifierProvider.notifier);
           final bool isError = starState is StarError;
           Star star;
           DateTime returnedDate = DateTime.now();
@@ -65,7 +65,7 @@ class _BottomIconRowState extends State<BottomIconRow> {
                         } on StarException {
                           return;
                         }
-                        context
+                        ref
                             .read(downloadNotifierProvider.notifier)
                             .setHasNotDownloaded();
                       }

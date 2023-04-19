@@ -32,17 +32,21 @@ class StarNotifier extends StateNotifier<StarState> {
 
   Future<void> getStarData(DateTime dateTime) async {
     try {
+      print('start loading');
       state = StarLoading();
       final star = await _starRepository.fetchStar(dateTime);
       // throw StarException(code: StarExceptionCode.rateLimitReached);
       state = StarLoaded(star);
+      print('star loaded');
     } on StarException catch (ex) {
+      print('star exception: $ex');
       if (ex.code == StarExceptionCode.rateLimitReached) {
         state = StarError(rateLimitMessage);
       } else {
         state = StarError('shooting star...');
       }
-    } on Exception {
+    } on Exception catch(e) {
+      print(e);
       state = StarError('shooting star...');
     }
   }

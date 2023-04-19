@@ -15,7 +15,7 @@
             </intent>
         </queries>
     <application
-        android:name="io.flutter.app.FlutterApplication"
+        android:name="${applicationName}"
         android:label="AstroDaily: Astronomy Pictures Every Day"
         android:icon="@mipmap/ic_launcher">
         <activity

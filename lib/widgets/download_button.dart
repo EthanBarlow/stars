@@ -31,8 +31,8 @@ class _DownloadButtonState extends State<DownloadButton> {
       padding: const EdgeInsets.all(4.0),
       child: Center(
         child: Consumer(
-          builder: (context, watch, child) {
-            final downloadedState = watch(downloadNotifierProvider.notifier);
+          builder: (context, ref, child) {
+            final downloadedState = ref.watch(downloadNotifierProvider.notifier);
             switch (_downloadState) {
               case DownloadState.running:
                 return Container(
