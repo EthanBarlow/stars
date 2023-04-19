@@ -31,13 +31,14 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
   @override
   void initState() {
     super.initState();
-ref.read(starNotifierProvider.notifier).getStarData(DateTime.now());
-    
-    // starNotifier = 
-    userDownloadStateNotifier = ProviderContainer().read(downloadNotifierProvider.notifier);
-    // networkCall =  starNotifier.getStarData(DateTime.now());
-          // ref.read(starNotifierProvider.notifier).getStarData(DateTime.now());
- /*    try {
+    // ref.read(starNotifierProvider.notifier).getStarData(DateTime.now());
+
+    // starNotifier =
+    userDownloadStateNotifier =
+        ProviderContainer().read(downloadNotifierProvider.notifier);
+    networkCall = ref.read(starNotifierProvider).getStarData(DateTime.now());
+    // ref.read(starNotifierProvider.notifier).getStarData(DateTime.now());
+    /*    try {
 
     } on StarException catch (se) {
       // Any StarExceptions thrown should be caught further down the call tree
@@ -68,50 +69,46 @@ ref.read(starNotifierProvider.notifier).getStarData(DateTime.now());
 
     return Scaffold(
       body: SafeArea(
-        child: Center(child: Column(
-          children: [
-            Text('loading'),
-            TextButton(child: Text('find star'),
-            onPressed: () {
-              ref.read(starNotifierProvider.notifier).getStarData(DateTime.now());
-            },
-            ),
-         
-        
-        Expanded(
-          child: Consumer(builder: (context, ref, child) {
-            final starState = ref.watch(starNotifierProvider);
-            if (starState is StarInitial) {
-              return Center(child: Column(
-                children: [
-                  Text('initial state'),
-                  TextButton(child: Text('load'),onPressed: () {
-                    ref.read(starNotifierProvider.notifier).getStarData(DateTime.now());
-                  },),
-                ],
-              ));
-            } else if (starState is StarLoading) {
-              return Center(child: CircularProgressIndicator());
-            } else if (starState is StarError) {
-              return MainView(
-                screenHeight: screenHeight,
-                returnedDate: earliestDateTime.subtract(Duration(days: 1)),
-                explanation: starState.message.compareTo(rateLimitMessage) == 0 ? rateLimitTechMessage : starState.message,
-              );
-            } else if (starState is StarLoaded) {
-              return MainView(
-                screenHeight: screenHeight,
-                title: starState.star.title,
-                copyright: starState.star.copyright,
-                returnedDate: starState.star.returnedDate,
-                explanation: starState.star.explanation,
-              );
-            } else {
-              return Center(child: Text('how... what... how?'));
-            }
-          }),
-        ),  ],
-        ),),
+        child: Consumer(builder: (context, ref, child) {
+          final starState =
+              ref.watch(starNotifierProvider.select((value) => value.state));
+          if (starState is StarInitial) {
+            return Center(
+                child: Column(
+              children: [
+                Text('initial state'),
+                TextButton(
+                  child: Text('load'),
+                  onPressed: () {
+                    ref
+                        .read(starNotifierProvider.notifier)
+                        .getStarData(DateTime.now());
+                  },
+                ),
+              ],
+            ));
+          } else if (starState is StarLoading) {
+            return Center(child: CircularProgressIndicator());
+          } else if (starState is StarError) {
+            return MainView(
+              screenHeight: screenHeight,
+              returnedDate: earliestDateTime.subtract(Duration(days: 1)),
+              explanation: starState.message.compareTo(rateLimitMessage) == 0
+                  ? rateLimitTechMessage
+                  : starState.message,
+            );
+          } else if (starState is StarLoaded) {
+            return MainView(
+              screenHeight: screenHeight,
+              title: starState.star.title,
+              copyright: starState.star.copyright,
+              returnedDate: starState.star.returnedDate,
+              explanation: starState.star.explanation,
+            );
+          } else {
+            return Center(child: Text('how... what... how?'));
+          }
+        }),
       ),
     );
   }

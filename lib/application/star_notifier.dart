@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:picture_of_the_day/constants.dart';
 import 'package:picture_of_the_day/infrastructure/models/Star.dart';
@@ -26,14 +27,48 @@ class StarError extends StarState {
   const StarError(this.message);
 }
 
-class StarNotifier extends StateNotifier<StarState> {
+class StarNotifier extends ChangeNotifier {
   final StarRepository _starRepository;
-  StarNotifier(this._starRepository) : super(StarInitial());
+  late StarState state;
+  StarNotifier(this._starRepository) {
+    state = StarInitial();
+  }
 
   Future<void> getStarData(DateTime dateTime) async {
     try {
       print('start loading');
-      state = StarLoading();
+      state = const StarLoading();
+      notifyListeners();
+      final star = await _starRepository.fetchStar(dateTime);
+      // throw StarException(code: StarExceptionCode.rateLimitReached);
+      state = StarLoaded(star);
+      notifyListeners();
+      print('star loaded');
+    } on StarException catch (ex) {
+      print('star exception: $ex');
+      if (ex.code == StarExceptionCode.rateLimitReached) {
+        state = const StarError(rateLimitMessage);
+      } else {
+        state = const StarError('shooting star...');
+      }
+      notifyListeners();
+    } on Exception catch (e) {
+      print(e);
+      state = const StarError('shooting star...');
+      notifyListeners();
+    }
+  }
+}
+
+
+/* class StarNotifier extends StateNotifier<StarState> {
+  final StarRepository _starRepository;
+  StarNotifier(this._starRepository) : super(const StarInitial());
+
+  Future<void> getStarData(DateTime dateTime) async {
+    try {
+      print('start loading');
+      state = const StarLoading();
       final star = await _starRepository.fetchStar(dateTime);
       // throw StarException(code: StarExceptionCode.rateLimitReached);
       state = StarLoaded(star);
@@ -41,13 +76,14 @@ class StarNotifier extends StateNotifier<StarState> {
     } on StarException catch (ex) {
       print('star exception: $ex');
       if (ex.code == StarExceptionCode.rateLimitReached) {
-        state = StarError(rateLimitMessage);
+        state = const StarError(rateLimitMessage);
       } else {
-        state = StarError('shooting star...');
+        state = const StarError('shooting star...');
       }
-    } on Exception catch(e) {
+    } on Exception catch (e) {
       print(e);
-      state = StarError('shooting star...');
+      state = const StarError('shooting star...');
     }
   }
 }
+ */

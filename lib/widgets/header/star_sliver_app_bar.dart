@@ -92,7 +92,8 @@ class AppBarHeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer(builder: (context, ref, child) {
-      final starState = ref.watch(starNotifierProvider);
+      final starState =
+          ref.watch(starNotifierProvider.select((value) => value.state));
       if (starState is StarLoaded) {
         Star star = starState.star;
 

@@ -6,11 +6,19 @@ import 'package:picture_of_the_day/infrastructure/repositories/star_repository.d
 final _starRepositoryProvider =
     Provider<StarRepository>((ref) => RealStarRepository());
 
-final starNotifierProvider =
-    StateNotifierProvider<StarNotifier, StarState>((ref) {
+final starNotifierProvider = ChangeNotifierProvider<StarNotifier>((ref) {
   return StarNotifier(ref.watch(_starRepositoryProvider));
 });
+// final starNotifierProvider =
+//     StateNotifierProvider<StarNotifier, StarState>((ref) {
+//   return StarNotifier(ref.watch(_starRepositoryProvider));
+// });
 
-final downloadNotifierProvider = StateNotifierProvider<UserDownloadStateNotifier, bool>((ref) {
+// final starStateProvider = StateProvider((ref) => null)
+
+// final futureStar = FutureProvider.autoDispose.family<
+
+final downloadNotifierProvider =
+    StateNotifierProvider<UserDownloadStateNotifier, bool>((ref) {
   return UserDownloadStateNotifier(false);
 });

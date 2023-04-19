@@ -28,7 +28,8 @@ class _BottomIconRowState extends State<BottomIconRow> {
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Consumer(builder: (context, ref, child) {
-          final starState = ref.watch(starNotifierProvider);
+          final starState =
+              ref.watch(starNotifierProvider.select((value) => value.state));
           final notifier = ref.watch(starNotifierProvider.notifier);
           final bool isError = starState is StarError;
           Star star;
