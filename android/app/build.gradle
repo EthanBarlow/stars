@@ -58,7 +58,7 @@ android {
     }
 
     signingConfigs {
-       release {
+    release {
             def isBitrise = System.getenv("BITRISE_FLUTTER_PROJECT_LOCATION")?.trim()
             if (isBitrise) {
                 keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
@@ -85,6 +85,7 @@ android {
     kotlin {
         jvmToolchain(17) // Ensure Kotlin targets Java 17
     }
+    }
 
    buildTypes {
         release {
@@ -92,8 +93,7 @@ android {
            minifyEnabled false
            shrinkResources false
         }
-   }
-}
+    }
 
 flutter {
     source '../..'
