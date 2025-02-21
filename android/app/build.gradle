@@ -52,13 +52,13 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         // applicationId "com.barlow.picture_of_the_day"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
     signingConfigs {
-       release {
+    release {
             def isBitrise = System.getenv("BITRISE_FLUTTER_PROJECT_LOCATION")?.trim()
             if (isBitrise) {
                 keyAlias System.getenv("BITRISEIO_ANDROID_KEYSTORE_ALIAS")
@@ -85,12 +85,16 @@ android {
     kotlin {
         jvmToolchain(17) // Ensure Kotlin targets Java 17
     }
+    }
 
    buildTypes {
        release {
-           signingConfig signingConfigs.release
+           productFlavors.local.signingConfig signingConfigs.local
+           productFlavors.bitrise.signingConfig signingConfigs.bitrise
        }
    }
+
+   
 }
 
 flutter {
