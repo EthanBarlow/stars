@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
       title: 'Stars',
       theme: ThemeData(
         primarySwatch: Colors.amber,
-        backgroundColor: Colors.amber[100],
+        // backgroundColor: Colors.amber[100],
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: MyHomePage(title: 'Stars'),

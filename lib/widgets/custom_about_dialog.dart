@@ -89,7 +89,7 @@ class DialogContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color richTextColor =
-        Theme.of(context).primaryTextTheme.bodyText1?.color ?? Colors.black;
+        Theme.of(context).primaryTextTheme.bodyMedium?.color ?? Colors.black;
     const _fontSize = 16.0;
     return Column(
       children: [
