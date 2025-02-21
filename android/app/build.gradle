@@ -85,7 +85,7 @@ android {
     kotlin {
         jvmToolchain(17) // Ensure Kotlin targets Java 17
     }
-    }
+    
 
    buildTypes {
         release {
@@ -94,6 +94,7 @@ android {
            shrinkResources false
         }
     }
+}
 
 flutter {
     source '../..'
