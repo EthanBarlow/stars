@@ -52,7 +52,7 @@ android {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         // applicationId "com.barlow.picture_of_the_day"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -88,19 +88,18 @@ android {
     }
 
    buildTypes {
-       release {
-           productFlavors.local.signingConfig signingConfigs.local
-           productFlavors.bitrise.signingConfig signingConfigs.bitrise
-       }
-   }
-
-   
-}
+        release {
+           signingConfig signingConfigs.release
+           minifyEnabled false
+           shrinkResources false
+        }
+    }
 
 flutter {
     source '../..'
 }
 
 dependencies {
+    implementation 'org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
