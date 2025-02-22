@@ -1,15 +1,25 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:picture_of_the_day/constants.dart';
 import 'dart:convert';
 import 'dart:async';
 
 import 'package:picture_of_the_day/infrastructure/models/Star.dart';
+import 'package:picture_of_the_day/main.dart';
 import 'package:picture_of_the_day/star_exception.dart';
 
 class ApiHelper {
   static Future<Star> getStar(DateTime date) async {
-    String apiKey = dotenv.env['API_KEY']!;
+    // String apiKey = dotenv.env['API_KEY']!;
+    String apiKey = '';
+
+    try {
+      apiKey = remoteConfig.getString('APOD_API_KEY');
+    } catch (e, stackTrace) {
+      FirebaseCrashlytics.instance.recordError(e, stackTrace);
+    }
+
     String _baseUrl = 'https://api.nasa.gov/planetary/apod?api_key=$apiKey';
     String urlDate = date.year.toString() +
         '-' +
