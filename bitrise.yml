@@ -1,0 +1,75 @@
+---
+format_version: '11'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: flutter
+workflows:
+  latest:
+    steps:
+    - activate-ssh-key@4:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+        inputs:
+        - is_remove_other_identities: false
+    - git-clone@8: {}
+    - script@1:
+        title: Copy Google Services json to dir
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+            
+            cp $GOOGLE_SERVICES_PATH $BITRISE_SOURCE_DIR/android/app/google-services.json
+    - install-flutter-version-manager@2: {}
+    - flutter-installer@0:
+        inputs:
+        - version: "$FVM_FLUTTER_VERSION"
+        - is_update: false
+    - script@1:
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+
+            # write your script here
+            flutter doctor -v
+            flutter pub get
+        title: Flutter Doctor and Pub Get
+    - flutter-analyze@0: {}
+    - flutter-build@0:
+        inputs:
+        - platform: android
+        - android_output_type: appbundle
+        - android_additional_params: "--release"
+
+app:
+  envs:
+  - opts:
+      is_expand: false
+    BITRISE_FLUTTER_PROJECT_LOCATION: "."
+  - opts:
+      is_expand: false
+    GIT_REPOSITORY_URL: https://github.com/EthanBarlow/stars.git
+  - opts:
+      is_expand: false
+    BITRISE_GIT_BRANCH: master
+  # - opts:
+  #     ix_expand: false
+  #   GOOGLE_SERVICES_PATH: $BITRISE_SECRETS_SOURCE_DIR/google-services.json
+# trigger_map:
+# - push_branch: release
+#   enabled: false
+#   type: push
+#   workflow: deploy3
+# - push_branch: testing
+#   enabled: false
+#   type: push
+#   workflow: testing

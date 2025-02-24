@@ -46,5 +46,7 @@ upload-keystore.jks
 android/app/upload-keystore.jks
 android/app/google-services.json
 
+.bitrise.secrets.yml
+
 # FVM Version Cache
 .fvm/
