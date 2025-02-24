@@ -11,6 +11,19 @@ workflows:
         - is_remove_other_identities: false
     - git-clone@8: {}
     - script@1:
+        title: Copy Android keystore
+        inputs:
+        - content: |-
+            #!/usr/bin/env bash
+            # fail if any commands fails
+            set -e
+            # make pipelines' return status equal the last command to exit with a non-zero status, or zero if all commands exit successfully
+            set -o pipefail
+            # debug log
+            set -x
+            
+            cp $ANDROID_KEY_PROPERTIES $BITRISE_SOURCE_DIR/android/key.properties
+    - script@1:
         title: Copy Google Services json to dir
         inputs:
         - content: |-
@@ -48,7 +61,7 @@ workflows:
         inputs:
         - platform: android
         - android_output_type: appbundle
-        - android_additional_params: "--release"
+        - android_additional_params: "--release --verbose"
 
 app:
   envs:
