@@ -1,7 +1,46 @@
----
 format_version: '11'
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: flutter
+
+app:
+  envs:
+  - opts:
+      is_expand: false
+    BITRISE_FLUTTER_PROJECT_LOCATION: "."
+  - opts:
+      is_expand: false
+    GIT_REPOSITORY_URL: https://github.com/EthanBarlow/stars.git
+  - opts:
+      is_expand: false
+    BITRISE_GIT_BRANCH: master
+  # - opts:
+  #     ix_expand: false
+  #   GOOGLE_SERVICES_PATH: $BITRISE_SECRETS_SOURCE_DIR/google-services.json
+# trigger_map:
+# - push_branch: release
+#   enabled: false
+#   type: push
+#   workflow: deploy3
+# - push_branch: testing
+#   enabled: false
+#   type: push
+#   workflow: testing
+
+trigger_map:
+- pipeline: testing
+  tag: test-build
+
+pipelines:
+  testing:
+    stages:
+    - only_stage: {}
+
+stages:
+  only_stage:
+    workflows:
+    - latest: {}
+    - distribute_latest: {}
+
 workflows:
   latest:
     steps:
@@ -62,27 +101,12 @@ workflows:
         - platform: android
         - android_output_type: appbundle
         - android_additional_params: "--release --verbose"
-
-app:
-  envs:
-  - opts:
-      is_expand: false
-    BITRISE_FLUTTER_PROJECT_LOCATION: "."
-  - opts:
-      is_expand: false
-    GIT_REPOSITORY_URL: https://github.com/EthanBarlow/stars.git
-  - opts:
-      is_expand: false
-    BITRISE_GIT_BRANCH: master
-  # - opts:
-  #     ix_expand: false
-  #   GOOGLE_SERVICES_PATH: $BITRISE_SECRETS_SOURCE_DIR/google-services.json
-# trigger_map:
-# - push_branch: release
-#   enabled: false
-#   type: push
-#   workflow: deploy3
-# - push_branch: testing
-#   enabled: false
-#   type: push
-#   workflow: testing
+  distribute_latest:
+    steps:
+    - firebase-app-distribution@0:
+        inputs:
+        - app_path: $BITRISE_AAB_PATH
+        - app: $ANDROID_FIREBASE_APP_ID
+        # - groups: $FIREBASE_TESTER_GROUP
+        - testers: "ethanbarlow07@gmail.com"
+        - firebase_token: $FIREBASE_CI_TOKEN
