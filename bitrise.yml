@@ -92,15 +92,29 @@ workflows:
             set -x
 
             # write your script here
+            flutter clean
             flutter doctor -v
             flutter pub get
         title: Flutter Doctor and Pub Get
+    - get-pubspec-version-and-build-number@1: {}
+    - change-android-versioncode-and-versionname@1:
+        inputs:
+        - build_gradle_path: "$BITRISE_SOURCE_DIR/android/app/build.gradle"
+        - new_version_name: $PUBSPEC_VERSION_NAME
+        - new_version_code: $PUBSPEC_BUILD_NUMBER
     - flutter-analyze@0: {}
     - flutter-build@0:
         inputs:
         - platform: android
         - android_output_type: appbundle
         - android_additional_params: "--release --verbose"
+    - firebase-app-distribution@0:
+        inputs:
+        - app_path: $BITRISE_AAB_PATH
+        - app: $ANDROID_FIREBASE_APP_ID
+        # - groups: $FIREBASE_TESTER_GROUP
+        - testers: "ethanbarlow07@gmail.com"
+        - firebase_token: $FIREBASE_CI_TOKEN
   distribute_latest:
     steps:
     - firebase-app-distribution@0:
